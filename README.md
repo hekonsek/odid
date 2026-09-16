@@ -4,7 +4,8 @@
 
 ## Specification
 
-Specification of the project can be found [here](specs). 
+- [Spec](docs/spec)
+- [ADRs](docs/adr)
 
 ## License
 
