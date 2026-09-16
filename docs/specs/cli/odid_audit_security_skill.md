@@ -5,3 +5,10 @@ Runs security audit against given skill and prints human readable raport. `${SKI
 ## Options
 
 - `--json`: Prints raw audit JSON instead of human readable output.
+
+## Prompt
+
+When running security audit of a skill, use the following prompt: 
+
+```
+```
