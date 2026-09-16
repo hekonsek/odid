@@ -1,5 +1,6 @@
-import { lstat, readFile } from "node:fs/promises";
-import { isAbsolute, resolve } from "node:path";
+import { cp, lstat, mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { AuditResult, AuditService } from "../audit/audit-service.js";
 
@@ -39,7 +40,19 @@ export class SkillSecurityAuditService implements SecurityAuditService {
 
     const template = await readFile(this.promptPath, "utf8");
     const prompt = template.replaceAll("${SKILL_DIR_PATH}", ".") + await loadSuppressions(cwd);
-    return this.auditService.audit({ subjectPath, prompt });
+    const snapshotRoot = await mkdtemp(join(tmpdir(), "odid-skill-audit-"));
+    const snapshotPath = join(snapshotRoot, "skill");
+    try {
+      await cp(subjectPath, snapshotPath, {
+        recursive: true,
+        dereference: false,
+        preserveTimestamps: true,
+        verbatimSymlinks: true,
+      });
+      return await this.auditService.audit({ subjectPath: snapshotPath, prompt });
+    } finally {
+      await rm(snapshotRoot, { recursive: true, force: true });
+    }
   }
 }
 
