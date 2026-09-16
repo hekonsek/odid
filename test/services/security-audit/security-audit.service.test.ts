@@ -16,6 +16,22 @@ afterEach(async () => {
 });
 
 describe("SkillSecurityAuditService", () => {
+  it("includes source-location guidance from the security audit prompt", async () => {
+    const cwd = await temporaryDirectory();
+    const skillPath = join(cwd, "skill");
+    await mkdir(skillPath);
+    const audit = vi.fn<AuditService["audit"]>().mockResolvedValue({ score: 100, risks: [] });
+    const service = new SkillSecurityAuditService({ audit });
+
+    await service.auditSkill("skill", { cwd });
+
+    expect(audit).toHaveBeenCalledWith({
+      subjectPath: skillPath,
+      prompt: expect.stringContaining("include path and filename causing the risk"),
+    });
+    expect(audit.mock.calls[0]?.[0].prompt).toContain("line or line ranges");
+  });
+
   it("resolves a skill and adds configured suppressions to the prompt", async () => {
     const cwd = await temporaryDirectory();
     const skillPath = join(cwd, "skills", "example");
