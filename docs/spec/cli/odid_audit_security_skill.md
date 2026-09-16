@@ -1,6 +1,8 @@
 # odid audit security skill ${SKILL_PATH}
 
-Runs security audit against given skill and prints human readable raport. `${SKILL_PATH}` points to a directory of skill to be audited.
+Runs security audit against given skill and prints human readable raport.
+
+`${SKILL_PATH}` points to a directory of skill to be audited, relative to current directory.
 
 ## Options
 
@@ -8,7 +10,4 @@ Runs security audit against given skill and prints human readable raport. `${SKI
 
 ## Prompt
 
-When running security audit of a skill, use the following prompt: 
-
-```
-```
+When running security audit of a skill, use [this prompt](../prompts/audit-security.md).
