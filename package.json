@@ -17,6 +17,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "node --import tsx src/cli.ts",
+    "prepare": "npm run build",
     "test": "vitest run",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json"
   },
